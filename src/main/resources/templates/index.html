@@ -32,11 +32,15 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="https://github.com/login/oauth/authorize?client_id=4675dfc27ee7cde61639&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+
+                <li th:unless="${session.user != null}">
+                    <a href="https://github.com/login/oauth/authorize?client_id=4675dfc27ee7cde61639&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
+                        登录
+                    </a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">自己<span class="caret"></span></a>
+                <li class="dropdown"  th:if="${session.user!=null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}">
+                        <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息</a></li>
                         <li><a href="#">资料</a></li>

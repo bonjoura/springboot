@@ -9,6 +9,8 @@ import top.vulcanus.dto.AccessTokenDTO;
 import top.vulcanus.dto.GithubUser;
 import top.vulcanus.provider.GithubProvider;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class AuthController {
 
@@ -24,7 +26,8 @@ public class AuthController {
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
-                           @RequestParam(name = "state") String state){
+                           @RequestParam(name = "state") String state,
+                           HttpServletRequest request){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri("http://localhost:8887/callback");
@@ -34,7 +37,13 @@ public class AuthController {
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser user = githubProvider.getUser(accessToken);
-        System.out.println(user.getName());
-        return "index";
+        if(user!=null){
+            request.getSession().setAttribute("user",user);
+            return "redirect:/";
+        }else {
+            //fail
+            return "redirect:/";
+        }
+
     }
 }
